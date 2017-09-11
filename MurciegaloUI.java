@@ -14,10 +14,13 @@ public class MurciegaloUI implements UI {
 	@Override
 	public void onButtonPressed(String name) {
 		if (name.equals("Reiniciar Nivel")) {
+			
+			// TODO
 
 		} else if (name.equals("Regresar a la pantalla de inicio")) {
 			this.gui.removeAllButtons();
 			this.initialiseInterface();
+			game.pantallaDeInicio = true;
 		}
 	}
 

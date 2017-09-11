@@ -1,9 +1,7 @@
 package murciegalo;
 
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Queue;
 import java.util.Stack;
 
@@ -12,16 +10,13 @@ public class MurciegaloGame {
 	private Casilla CasillaDeLetras;
 	private Casilla CasillaDeSoloVocales;
 	protected boolean pantallaDeInicio = true;
-	// private int dinero = 0;
-	// private Stack<Casilla> pilaJugable = new Stack<Casilla>();
-	// private Stack<Casilla> pilaInversa = new Stack<Casilla>();
-	// private List<Casilla> listaInicial = new LinkedList<Casilla>();
-	// private Queue<Casilla> colaJugable = new LinkedList<Casilla>();
-	// private boolean recompensaMuyEspecial == false
+	private List<Casilla> listaInicial = new LinkedList<Casilla>();
+	private Stack<Casilla> pilaInversa = new Stack<Casilla>();
+	private Queue<Casilla> colaJugable = new LinkedList<Casilla>();
 
-	Map<Integer, Palabra> nivel1 = new HashMap<Integer, Palabra>();
-	Map<Integer, Palabra> nivel2 = new HashMap<Integer, Palabra>();
-	Map<Integer, Palabra> nivel3 = new HashMap<Integer, Palabra>();
+	List<Palabra> nivel1 = new LinkedList<Palabra>();
+	List<Palabra> nivel2 = new LinkedList<Palabra>();
+	List<Palabra> nivel3 = new LinkedList<Palabra>();
 
 	public MurciegaloGame(MurciegaloUI ui) {
 		this.ui = ui;
@@ -47,11 +42,16 @@ public class MurciegaloGame {
 	}
 
 	private void crearNivel(int nivel) {
+		int identificador = 0;
+		this.configurarPalabra(nivel, identificador);
+	}
+
+	private void configurarPalabra(int nivel, int identificador) {
+
 		// el identificador debe permitir escoger el nivel a jugar
 		// List<Casilla> listaInicial = new LinkedList<Casilla>();
 		// Stack<Casilla> pilaInversa = new Stack<Casilla>();
 		// Queue<Casilla> colaJugable = new LinkedList<Casilla>();
-		int identificador = 0;
 
 		// Escoge el conjunto de palabras a utilizar, luego escoge una palabra de éste,
 		// y crea una nueva matriz con las
@@ -122,28 +122,20 @@ public class MurciegaloGame {
 
 	private void crearInterfazDelNivel(Palabra palabra) {
 
-		if (palabra.getLargo() <= 6) {
-			this.ui.crearMatriz(10, 12, 0, 0, 12);
-			this.dibujarImagenes(palabra);
-		
-		} else {
-			this.ui.crearMatriz(11, 12, 0, 0, 12);
-			this.dibujarImagenes(palabra);
-		
-
-		}
+		this.ui.crearMatriz(16, 18, 0, 0, 12);
+		this.dibujarImagenes(palabra);
 
 	}
 
 	public void dibujarImagenes(Palabra palabra) {
 		char[] letraDeLaPalabra = palabra.getPalabraOrdenada().toCharArray();
 
-		for (int v = 0; v < 12; v++) {
-			for (int h = 0; h < 12; h++) {
+		for (int v = 0; v < 18; v++) {
+			for (int h = 0; h < 16; h++) {
 				if (v == 1 && h > 0 && h < palabra.getLargo()) {
 					// Aquí colocar imágenes de la palabra ordenada
 					this.ui.dibujarImagen(v, h, "" + letraDeLaPalabra[h - 1]);
-				} else if (v == 3 || v == 5 || v == 7 && h > 0 && h < palabra.getLargo()) {
+				} else if (v == 3 && h > 0 && h < 15) {
 					// Aquí colocar las imágenes de la cola jugable
 					if (h % 2 == 0) {
 						// Si la casilla es par dibuja una celda de sólo vocales
@@ -151,18 +143,18 @@ public class MurciegaloGame {
 					} else {
 						this.ui.dibujarImagen(v, h, "casillaDeLetras");
 					}
-				} else if (v > 2 && v < palabra.getLargo() && h == 8) {
+				} else if (v > 4 && v < palabra.getLargo() && h == 7) {
 					// Aquí dibujar la pila jugable
-					if (letraDeLaPalabra[v - 2] == 'a' || letraDeLaPalabra[v - 2] == 'e'
-							|| letraDeLaPalabra[v - 2] == 'i' || letraDeLaPalabra[v - 2] == 'o'
-							|| letraDeLaPalabra[v - 2] == 'u') {
+					if (letraDeLaPalabra[v - 5] == 'a' || letraDeLaPalabra[v - 5] == 'e'
+							|| letraDeLaPalabra[v - 5] == 'i' || letraDeLaPalabra[v - 5] == 'o'
+							|| letraDeLaPalabra[v - 5] == 'u') {
 						this.ui.dibujarImagen(v, h, "casillaDeSoloVocales");
 					} else {
 						this.ui.dibujarImagen(v, h, "casillaDeLetras");
 					}
-				} else if (v > 2 && v < palabra.getLargo() && h == 10) {
+				} else if (v > 4 && v < palabra.getLargo() && h == 9) {
 					// Aquí dibujar la palabra ordenada
-					this.ui.dibujarImagen(v, h, "" + letraDeLaPalabra[v - 2]);
+					this.ui.dibujarImagen(v, h, "" + letraDeLaPalabra[v - 5]);
 				} else {
 					// Aquí dibujar el fondo
 					this.ui.dibujarImagen(v, h, "fondo");
@@ -173,9 +165,6 @@ public class MurciegaloGame {
 
 	public void crearLogicaDelNivel(Palabra palabra) {
 
-		List<Casilla> listaInicial = new LinkedList<Casilla>();
-		Stack<Casilla> pilaInversa = new Stack<Casilla>();
-		Queue<Casilla> colaJugable = new LinkedList<Casilla>();
 		String palabraDesordenada = palabra.getPalabraDesordenada();
 		String palabraOrdenada = palabra.getPalabraOrdenada();
 		int largo = palabra.getLargo();
@@ -213,16 +202,17 @@ public class MurciegaloGame {
 		Palabra bolivia = new Palabra(0, 0, "vobilia", "bolivia");
 		Palabra osman = new Palabra(0, 0, "nasmo", "osman");
 
-		nivel1.put(0, amor);
-		nivel1.put(1, gato);
-		nivel1.put(2, alexis);
-		nivel1.put(3, iphone);
-		nivel1.put(4, tetekos);
-		nivel1.put(5, forum);
-		nivel1.put(6, rosa);
-		nivel1.put(7, feel);
-		nivel1.put(8, bolivia);
-		nivel1.put(9, osman);
+		nivel1.add(amor);
+		nivel1.add(perro);
+		nivel1.add(gato);
+		nivel1.add(alexis);
+		nivel1.add(iphone);
+		nivel1.add(tetekos);
+		nivel1.add(forum);
+		nivel1.add(rosa);
+		nivel1.add(feel);
+		nivel1.add(bolivia);
+		nivel1.add(osman);
 	}
 
 }

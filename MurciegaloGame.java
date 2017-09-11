@@ -13,6 +13,7 @@ public class MurciegaloGame {
 	private List<Casilla> listaInicial = new LinkedList<Casilla>();
 	private Stack<Casilla> pilaInversa = new Stack<Casilla>();
 	private Queue<Casilla> colaJugable = new LinkedList<Casilla>();
+	private int identificador1 = 0;
 
 	List<Palabra> nivel1 = new LinkedList<Palabra>();
 	List<Palabra> nivel2 = new LinkedList<Palabra>();
@@ -37,86 +38,22 @@ public class MurciegaloGame {
 			}
 		} else {
 			// Aquí el funcionamiento de todo el juego cuando ya se inicio un nivel
+			
 
 		}
 	}
 
 	private void crearNivel(int nivel) {
-		int identificador = 0;
-		this.configurarPalabra(nivel, identificador);
+
+		this.configurarPalabra(nivel, identificador1);
 	}
 
 	private void configurarPalabra(int nivel, int identificador) {
 
 		// el identificador debe permitir escoger el nivel a jugar
-		// List<Casilla> listaInicial = new LinkedList<Casilla>();
-		// Stack<Casilla> pilaInversa = new Stack<Casilla>();
-		// Queue<Casilla> colaJugable = new LinkedList<Casilla>();
-
-		// Escoge el conjunto de palabras a utilizar, luego escoge una palabra de éste,
-		// y crea una nueva matriz con las
-		// listas y colas necesarias para el nivel
-
-		// if (nivel == 1) {
-		// Obtener la palabra del nivel
 		Palabra palabra = nivel1.get(identificador);
 		this.crearLogicaDelNivel(palabra);
-		// String palabraDesordenada = palabra.getPalabraDesordenada();
-		// String palabraOrdenada = palabra.getPalabraOrdenada();
-		// int largo = palabra.getLargo();
-		// // Separar cada letra
-		// char[] letrasDeLaPalabra = palabraDesordenada.toCharArray();
-		// // Guardar cada letra en una casilla
-		// Casilla[] casillaDeLetras = new Casilla[largo];
-		// for (int i = 0; i < largo; i++) {
-		// casillaDeLetras[i].setLetra(letrasDeLaPalabra[i]);
-		// // Guardar cada casilla en la lista inicial de casillas
-		// listaInicial.add(casillaDeLetras[i]);
-		// }
-		// // Crear una pila para compararla con la pila en la que estará el resultado
-		// for (int i = 0; i < largo; i++) {
-		// if (letrasDeLaPalabra[i] == 'a' || letrasDeLaPalabra[i] == 'e' ||
-		// letrasDeLaPalabra[i] == 'i'
-		// || letrasDeLaPalabra[i] == 'o' || letrasDeLaPalabra[i] == 'u' ||
-		// letrasDeLaPalabra[i] == ' ') {
-		// pilaInversa.add(CasillaDeSoloVocales);
-		// } else {
-		// pilaInversa.add(CasillaDeLetras);
-		//
-		// }
-		// }
 		this.crearInterfazDelNivel(palabra);
-		// }
-		// } else if (nivel == 2) {
-		// nivel2.get(identificador2);
-		// // Obtener la palabra del nivel
-		// String palabraDesordenada =
-		// nivel2.get(identificador2).getPalabraDesordenada();
-		// // Separar cada letra
-		// char[] letrasDeLaPalabra = palabraDesordenada.toCharArray();
-		// // Guardar cada letra en una casilla
-		// Casilla[] casillaDeLetras = new Casilla[palabraDesordenada.length()];
-		// for (int i = 0; i < palabraDesordenada.length(); i++) {
-		// casillaDeLetras[i].setLetra(letrasDeLaPalabra[i]);
-		// // Guardar cada casilla en la lista inicial de casillas
-		// listaInicial.add(casillaDeLetras[i]);
-		// }
-		// } else {
-		// nivel3.get(identificador3);
-		// // Obtener la palabra del nivel
-		// String palabraDesordenada =
-		// nivel3.get(identificador3).getPalabraDesordenada();
-		// // Separar cada letra
-		// char[] letrasDeLaPalabra = palabraDesordenada.toCharArray();
-		// // Guardar cada letra en una casilla
-		// Casilla[] casillaDeLetras = new Casilla[palabraDesordenada.length()];
-		// for (int i = 0; i < palabraDesordenada.length(); i++) {
-		// casillaDeLetras[i].setLetra(letrasDeLaPalabra[i]);
-		// // Guardar cada casilla en la lista inicial de casillas
-		// listaInicial.add(casillaDeLetras[i]);
-		//
-		// }
-		// }
 
 	}
 
@@ -169,18 +106,20 @@ public class MurciegaloGame {
 		String palabraOrdenada = palabra.getPalabraOrdenada();
 		int largo = palabra.getLargo();
 		// Separar cada letra
-		char[] letrasDeLaPalabra = palabraDesordenada.toCharArray();
+		char[] letrasDeLaPalabraDesordenada = palabraDesordenada.toCharArray();
+		char[] letrasDeLaPalabraOrdenada = palabraOrdenada.toCharArray();
 		// Guardar cada letra en una casilla
 		Casilla[] casillaDeLetras = new Casilla[largo];
 		for (int i = 0; i < largo; i++) {
-			casillaDeLetras[i].setLetra(letrasDeLaPalabra[i]);
+			casillaDeLetras[i].setLetra(letrasDeLaPalabraDesordenada[i]);
 			// Guardar cada casilla en la lista inicial de casillas
 			listaInicial.add(casillaDeLetras[i]);
 		}
 		// Crear una pila para compararla con la pila en la que estará el resultado
 		for (int i = 0; i < largo; i++) {
-			if (letrasDeLaPalabra[i] == 'a' || letrasDeLaPalabra[i] == 'e' || letrasDeLaPalabra[i] == 'i'
-					|| letrasDeLaPalabra[i] == 'o' || letrasDeLaPalabra[i] == 'u' || letrasDeLaPalabra[i] == ' ') {
+			if (letrasDeLaPalabraOrdenada[i] == 'a' || letrasDeLaPalabraOrdenada[i] == 'e'
+					|| letrasDeLaPalabraOrdenada[i] == 'i' || letrasDeLaPalabraOrdenada[i] == 'o'
+					|| letrasDeLaPalabraOrdenada[i] == 'u' || letrasDeLaPalabraOrdenada[i] == ' ') {
 				pilaInversa.add(CasillaDeSoloVocales);
 			} else {
 				pilaInversa.add(CasillaDeLetras);
